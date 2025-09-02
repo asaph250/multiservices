@@ -8,6 +8,7 @@ interface User {
   email: string;
   name: string;
   subscription: 'basic' | 'pro' | 'vip' | null;
+  role: string; // e.g. 'user', 'builder', 'admin'
 }
 
 interface AuthContextType {
@@ -48,18 +49,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('Setting up auth listener...');
-    
     // Listen for auth changes first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, session?.user?.email);
-      
       if (session?.user) {
         setUser({
           id: session.user.id,
           email: session.user.email || '',
           name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || '',
-          subscription: 'basic'
+          subscription: 'basic',
+          role: session.user.user_metadata?.role || 'user',
         });
       } else {
         setUser(null);
@@ -69,16 +67,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Then check for existing session
     const checkSession = async () => {
-      console.log('Checking for existing session...');
       const { data: { session }, error } = await supabase.auth.getSession();
-      console.log('Session check result:', { session, error });
-      
       if (session?.user) {
         setUser({
           id: session.user.id,
           email: session.user.email || '',
           name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || '',
-          subscription: 'basic'
+          subscription: 'basic',
+          role: session.user.user_metadata?.role || 'user',
         });
       }
       setLoading(false);
@@ -90,7 +86,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string) => {
-    console.log('Attempting login for:', email);
     setLoading(true);
     
     try {
@@ -106,7 +101,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw error;
       }
       
-      console.log('Login successful:', data.user?.email);
       // Log successful login attempt
       await logLoginAttempt(email, true, data.user?.id);
     } catch (error) {
@@ -118,7 +112,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signup = async (email: string, password: string, name: string) => {
-    console.log('Attempting signup for:', email);
     setLoading(true);
     
     try {
@@ -136,7 +129,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw error;
       }
       
-      console.log('Signup successful:', data);
     } catch (error) {
       console.error('Signup failed:', error);
       throw error;
@@ -146,7 +138,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    console.log('Logging out...');
     setLoading(true);
     try {
       await supabase.auth.signOut();

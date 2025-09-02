@@ -75,6 +75,43 @@ const Dashboard = () => {
     return null;
   }
 
+  // User role check
+  // Use user.role from context, default to 'user'
+  const userRole = user?.role || "user";
+  const isBuilder = userRole === "builder";
+
+  // Card lock config
+  const cards = [
+    {
+      to: "/payment",
+      icon: <CreditCard className="h-8 w-8 text-blue-600 mx-auto mb-2" />,
+      title: "Subscription",
+      desc: "Manage your plan",
+      locked: true,
+    },
+    {
+      to: "/business-idea-generator",
+      icon: <MessageSquare className="h-8 w-8 text-yellow-600 mx-auto mb-2" />,
+      title: "Business Generator",
+      desc: "AI-powered suggestions",
+      locked: true,
+    },
+    {
+      to: "/government-services",
+      icon: <Building className="h-8 w-8 text-yellow-600 mx-auto mb-2" />,
+      title: "Government Services",
+      desc: "RRA & Irembo help",
+      locked: false,
+    },
+    {
+      to: "/messaging",
+      icon: <Send className="h-8 w-8 text-green-600 mx-auto mb-2" />,
+      title: "Messaging Customers",
+      desc: "Send and manage messages",
+      locked: true,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
@@ -99,197 +136,39 @@ const Dashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Subscription Status - Prominent Section */}
-        <div className="mb-8">
-          <SubscriptionStatus />
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
-          <Link to="/payment">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer border-2 border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800">
-              <CardContent className="p-6 text-center">
-                <CreditCard className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100">Subscription</h3>
-                <p className="text-sm text-blue-700 dark:text-blue-300">Manage your plan</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/business-idea-generator">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer border-2 border-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20 dark:border-yellow-400">
-              <CardContent className="p-6 text-center">
-                <MessageSquare className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-yellow-900 dark:text-yellow-100">Business Ideas</h3>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">AI-powered suggestions</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/government-services">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer border-2 border-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20 dark:border-yellow-400">
-              <CardContent className="p-6 text-center">
-                <Building className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-yellow-900 dark:text-yellow-100">Gov Services</h3>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">RRA & Irembo help</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/compose-message">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <Send className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <h3 className="font-semibold">Send Message</h3>
-                <p className="text-sm text-gray-600">Compose and send to customers</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/customers">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <Users className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h3 className="font-semibold">{t('customers')}</h3>
-                <p className="text-sm text-gray-600">{t('manageContactLists')}</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/templates">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <FileText className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <h3 className="font-semibold">Templates</h3>
-                <p className="text-sm text-gray-600">Create reusable messages</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/analytics">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <BarChart className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-                <h3 className="font-semibold">Analytics</h3>
-                <p className="text-sm text-gray-600">View performance insights</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/import-export">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <Upload className="h-8 w-8 text-teal-600 mx-auto mb-2" />
-                <h3 className="font-semibold">Import/Export</h3>
-                <p className="text-sm text-gray-600">Manage customer data</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/message-history">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardContent className="p-6 text-center">
-                <History className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h3 className="font-semibold">Message History</h3>
-                <p className="text-sm text-gray-600">View all sent messages</p>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">247</CardTitle>
-              <CardDescription>{t('totalCustomers')}</CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">12</CardTitle>
-              <CardDescription>{t('messagesSentThisWeek')}</CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">95.8%</CardTitle>
-              <CardDescription>{t('deliverySuccessRate')}</CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-
-        {/* Customer Table Section */}
-        <div className="mb-8">
-          <CustomerTable />
-        </div>
-
-        {/* Customer List Section */}
-        <div className="mb-8">
-          <CustomerManager />
-        </div>
-
-        {/* Message History Section */}
-        <div className="mb-8">
-          <MessageHistory />
-        </div>
-
-        {/* Upcoming Scheduled Messages */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>{t('upcomingScheduledMessages')}</CardTitle>
-            <CardDescription>
-              {scheduledMessages.length > 0 
-                ? `${scheduledMessages.length} message${scheduledMessages.length !== 1 ? 's' : ''} scheduled for delivery`
-                : 'No messages currently scheduled'
-              }
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {scheduledLoading ? (
-              <div className="text-center py-4 text-gray-500">Loading scheduled messages...</div>
-            ) : scheduledMessages.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <Clock className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                <p>No scheduled messages yet.</p>
-                <p className="text-sm">Messages you schedule will appear here.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {scheduledMessages.map((message) => (
-                  <div key={message.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="outline" className="text-blue-600 border-blue-200">
-                          Scheduled
-                        </Badge>
-                        <span className="text-sm text-gray-600 dark:text-gray-300">
-                          {formatScheduledDate(message.scheduled_for)}
-                        </span>
-                      </div>
-                      <h4 className="font-medium mb-1">{message.message_title}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 line-clamp-2">
-                        {message.message_body}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {message.customer_count} {t('recipients')}
-                      </p>
+        {/* Only 4 cards shown, with lock overlay for non-builders */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          {cards.map((card, idx) => (
+            <div key={card.title} className="relative">
+              {(!isBuilder && card.locked) ? (
+                <div className="pointer-events-none">
+                  <Card className="hover:shadow-md transition-shadow cursor-not-allowed relative">
+                    <CardContent className="p-6 text-center">
+                      {card.icon}
+                      <h3 className="font-semibold">{card.title}</h3>
+                      <p className="text-sm">{card.desc}</p>
+                    </CardContent>
+                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-lg">
+                      <span className="text-gray-800 text-lg font-bold flex items-center gap-2">
+                        <span role="img" aria-label="locked">🔒</span> Unlocks Later
+                      </span>
                     </div>
-                    <div className="flex gap-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handleCancelMessage(message.id)}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  </Card>
+                </div>
+              ) : (
+                <Link to={card.to}>
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer relative">
+                    <CardContent className="p-6 text-center">
+                      {card.icon}
+                      <h3 className="font-semibold">{card.title}</h3>
+                      <p className="text-sm">{card.desc}</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

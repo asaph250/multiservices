@@ -57,7 +57,6 @@ const SubscriptionStatus = () => {
           <CreditCard className="h-5 w-5 mr-2" />
           Subscription Status
         </CardTitle>
-        <CardDescription>Your current plan and billing information</CardDescription>
       </CardHeader>
       <CardContent>
         {subscription ? (

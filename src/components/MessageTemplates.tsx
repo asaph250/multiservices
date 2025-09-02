@@ -16,8 +16,15 @@ const MessageTemplates = () => {
   const { templates, loading, createTemplate, updateTemplate, deleteTemplate } = useMessageTemplates();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<any>(null);
-  const [formData, setFormData] = useState({
+  interface Template {
+    id: string;
+    name: string;
+    content: string;
+    category: string;
+    created_at: string;
+  }
+  const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
+  const [formData, setFormData] = useState<{ name: string; content: string; category: string }>({
     name: '',
     content: '',
     category: 'general',
@@ -65,7 +72,7 @@ const MessageTemplates = () => {
   };
 
   const handleEdit = (template: any) => {
-    setEditingTemplate(template);
+    setEditingTemplate(template as Template);
     setFormData({
       name: template.name,
       content: template.content,

@@ -20,7 +20,6 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user && !loading) {
-      console.log('User is logged in, redirecting to dashboard');
       navigate("/dashboard", { replace: true });
     }
   }, [user, loading, navigate]);
@@ -44,13 +43,10 @@ const Login = () => {
         description: "You've successfully logged in.",
       });
       navigate("/dashboard", { replace: true });
-    } catch (error: any) {
-      console.error('Login error in component:', error);
-      
+    } catch (error) {
       let errorMessage = "Please check your credentials and try again.";
       let errorTitle = "Login failed";
-      
-      if (error?.message) {
+      if (error instanceof Error && error.message) {
         if (error.message.includes("Email not confirmed")) {
           errorTitle = "Account not activated";
           errorMessage = "Please check your email inbox and click the confirmation link to activate your account. If you can't find the email, check your spam folder.";
@@ -62,7 +58,6 @@ const Login = () => {
           errorMessage = "Too many login attempts. Please wait a few minutes before trying again.";
         }
       }
-      
       toast({
         title: errorTitle,
         description: errorMessage,

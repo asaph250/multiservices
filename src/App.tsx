@@ -22,13 +22,14 @@ import NotFound from "./features/NotFound";
 import Templates from "./features/Templates";
 import Analytics from "./features/Analytics";
 import ImportExport from "./features/ImportExport";
-import GovernmentServices from "./features/GovernmentServices";
+import GovernmentServicesDashboard from "./features/GovernmentServicesDashboard";
 import BusinessIdeaGenerator from "./features/BusinessIdeaGenerator";
 import Subscription from "./features/Subscription";
 import AgentTaskQueue from "./features/AgentTaskQueue";
 import AdminPayout from "./features/AdminPayout";
 import AdminRequestQueue from "./features/AdminRequestQueue";
 import AdminTaskReview from "./features/AdminTaskReview";
+import MessagingCustomers from "./features/MessagingCustomers";
 
 const queryClient = new QueryClient();
 
@@ -55,7 +56,7 @@ const App = () => (
                 <Route path="/templates" element={<Templates />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/import-export" element={<ImportExport />} />
-                <Route path="/government-services" element={<GovernmentServices />} />
+                <Route path="/government-services" element={<GovernmentServicesDashboard />} />
                 <Route path="/business-idea-generator" element={<BusinessIdeaGenerator />} />
                 <Route path="/subscription" element={<Subscription />} />
                 <Route path="/agent-tasks" element={<AgentTaskQueue />} />
@@ -64,6 +65,7 @@ const App = () => (
                 <Route path="/admin-task-review" element={<AdminTaskReview />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin-panel" element={<AdminPanel />} />
+                <Route path="/messaging" element={<MessagingCustomers />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </AuthProvider>

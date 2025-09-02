@@ -20,10 +20,10 @@ const BusinessIdeaGenerator = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [budget, setBudget] = useState("");
-  const [businessType, setBusinessType] = useState("");
-  const [location, setLocation] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [budget, setBudget] = useState<string>("");
+  const [businessType, setBusinessType] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [businessIdea, setBusinessIdea] = useState<BusinessIdea | null>(null);
 
   useEffect(() => {
@@ -33,10 +33,7 @@ const BusinessIdeaGenerator = () => {
   }, [user, navigate]);
 
   const generateBusinessIdea = async () => {
-    console.log("Generate business idea called with:", { budget, businessType, location });
-    
     if (!budget || !businessType || !location) {
-      console.log("Missing required fields for business idea generation");
       toast({
         title: "Missing Information",
         description: "Please enter your budget, select a business type, and choose your location.",
@@ -46,17 +43,12 @@ const BusinessIdeaGenerator = () => {
     }
 
     setIsGenerating(true);
-    console.log("Starting business idea generation...");
-    
     try {
       // Simulate AI generation with realistic business ideas based on budget and type
       await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
-      console.log("Business idea generation completed successfully");
-      
       const budgetNum = parseInt(budget);
       const idea = generateIdeaBasedOnInputs(budgetNum, businessType);
       setBusinessIdea(idea);
-      
       toast({
         title: "Business Idea Generated!",
         description: "Your personalized business idea is ready.",
@@ -223,6 +215,32 @@ const BusinessIdeaGenerator = () => {
     return null;
   }
 
+  // List of all districts in Rwanda
+  const rwandaDistricts = [
+    "Gasabo", "Kicukiro", "Nyarugenge",
+    "Bugesera", "Gatsibo", "Kayonza", "Kirehe", "Ngoma", "Nyagatare", "Rwamagana",
+    "Burera", "Gakenke", "Gicumbi", "Musanze", "Rulindo",
+    "Gisagara", "Huye", "Kamonyi", "Muhanga", "Nyamagabe", "Nyanza", "Nyaruguru", "Ruhango",
+    "Karongi", "Ngororero", "Nyabihu", "Rubavu", "Rutsiro",
+    "Rusizi", "Nyamasheke"
+  ];
+
+  // Grouped business types for Rwanda
+  const businessTypeGroups = [
+    {
+      label: "Urban Business Types",
+      types: [
+        "Supermarket", "Pharmacy", "Restaurant", "Hotel", "Bar", "Tech Startup", "Co-working Space", "Delivery Service", "Car Wash", "Printing & Stationery", "Mobile Money Shop", "Fashion Boutique", "Electronics Shop", "Beauty Salon", "Fitness Center", "Education Center", "Health Clinic", "Financial Services (SACCO, Microfinance)", "Construction Company", "Transport Company", "Event Planning", "Real Estate Agency", "ICT Services", "Professional Services (Legal, Accounting)", "Food Processing"
+      ]
+    },
+    {
+      label: "Rural Business Types",
+      types: [
+        "Crop Farming", "Livestock Farming", "Poultry Farming", "Agro-processing", "Village Savings Group", "Local Crafts (Basketry, Pottery)", "Solar Energy Sales", "Water Kiosk", "Tailoring", "Retail Shop", "Kiosk", "Motorcycle Taxi (Moto)", "Brick Making", "Furniture Making", "Milk Collection Center", "Maize Milling", "Rice Milling", "Honey Production", "Fish Farming", "Cooperative Business", "Mobile Money Agent", "Small Restaurant", "Barber Shop", "Bicycle Repair", "Community Pharmacy"
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
@@ -287,11 +305,16 @@ const BusinessIdeaGenerator = () => {
                   <SelectValue placeholder="Choose a business category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="General">General</SelectItem>
-                  <SelectItem value="Retail">Retail</SelectItem>
-                  <SelectItem value="Services">Services</SelectItem>
-                  <SelectItem value="Farming">Farming</SelectItem>
-                  <SelectItem value="Tech">Tech</SelectItem>
+                  {businessTypeGroups.map((group) => (
+                    <>
+                      <div className="px-2 py-1 text-xs font-semibold text-gray-500 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded">
+                        {group.label}
+                      </div>
+                      {group.types.map((type) => (
+                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                      ))}
+                    </>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -305,9 +328,9 @@ const BusinessIdeaGenerator = () => {
                   <SelectValue placeholder="Choose your district" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Gasabo">Gasabo</SelectItem>
-                  <SelectItem value="Kicukiro">Kicukiro</SelectItem>
-                  <SelectItem value="Nyarugenge">Nyarugenge</SelectItem>
+                  {rwandaDistricts.map((district) => (
+                    <SelectItem key={district} value={district}>{district}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
