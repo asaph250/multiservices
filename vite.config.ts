@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { componentTagger } from 'lovable-tagger';
 
 export default defineConfig(({ mode }) => ({
+  base: "/multiservices/", // 👈 This is the fix for GitHub Pages
   plugins: [
     react(),
     tsconfigPaths(),

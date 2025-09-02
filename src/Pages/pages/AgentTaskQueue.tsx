@@ -35,28 +35,17 @@ const AgentTaskQueue = () => {
     if (!user) return;
 
     try {
-      // Fetch approved tasks
-      const { data: approvedTasks, error: approvedError } = await supabase
-        .from('tasks')
+      // Fetch assigned requests for this agent
+      const { data: assignedRequests, error: assignedError } = await supabase
+        .from('government_services')
         .select('*')
-        .eq('agent_id', user.id)
-        .eq('status', 'approved')
+        .eq('assigned_to', user?.name)
         .order('created_at', { ascending: false });
 
-      if (approvedError) throw approvedError;
+      if (assignedError) throw assignedError;
 
-      // Fetch completed tasks
-      const { data: completedTasksData, error: completedError } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('agent_id', user.id)
-        .eq('status', 'completed')
-        .order('completed_at', { ascending: false });
-
-      if (completedError) throw completedError;
-
-      setActiveTasks(approvedTasks || []);
-      setCompletedTasks(completedTasksData || []);
+      setActiveTasks((assignedRequests || []).filter(r => r.status === 'approved'));
+      setCompletedTasks((assignedRequests || []).filter(r => r.status === 'completed'));
     } catch (error) {
       console.error('Error fetching tasks:', error);
       toast({

@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      government_services: {
+        Row: {
+          id: string;
+          client_name: string;
+          request_type: string;
+          description: string;
+          status: string;
+          assigned_to: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          client_name: string;
+          request_type: string;
+          description: string;
+          status?: string;
+          assigned_to?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          client_name?: string;
+          request_type?: string;
+          description?: string;
+          status?: string;
+          assigned_to?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      },
       agent_payouts: {
         Row: {
           agent_id: string

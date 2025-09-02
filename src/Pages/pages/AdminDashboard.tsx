@@ -50,7 +50,7 @@ const AdminDashboard = () => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
   const handleApprove = async (requestId: string) => {
     try {
       const { error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .update({ 
           status: 'approved',
           updated_at: new Date().toISOString()
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
   const handleReject = async (requestId: string) => {
     try {
       const { error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .update({ 
           status: 'cancelled',
           updated_at: new Date().toISOString()

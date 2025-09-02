@@ -64,15 +64,14 @@ const GovernmentServices = () => {
 
     try {
       const { error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .insert({
-          full_name: formData.fullName,
-          phone_number: formData.phoneNumber,
-          service_type: formData.serviceType,
-          document_details: formData.documentDetails,
-          notes: formData.notes,
-          file_urls: uploadedFiles,
-          client_id: user.id
+          client_name: formData.fullName,
+          request_type: formData.serviceType,
+          description: formData.documentDetails || formData.notes,
+          status: 'pending',
+          assigned_to: '',
+          created_at: new Date().toISOString()
         });
 
       if (error) throw error;

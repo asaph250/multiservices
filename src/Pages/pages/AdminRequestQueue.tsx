@@ -14,12 +14,11 @@ import { useToast } from "@/hooks/use-toast";
 
 interface ServiceRequest {
   id: string;
-  full_name: string;
-  phone_number: string;
-  service_type: string;
-  document_details: string;
-  notes: string;
+  client_name: string;
+  request_type: string;
+  description: string;
   status: string;
+  assigned_to: string;
   created_at: string;
 }
 
@@ -49,13 +48,13 @@ const AdminRequestQueue = () => {
 
     try {
       const { data, error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .select('*')
         .in('status', ['pending', 'approved'])
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setRequests(data || []);
+  setRequests(data as ServiceRequest[] || []);
     } catch (error) {
       console.error('Error fetching requests:', error);
       toast({
@@ -93,7 +92,7 @@ const AdminRequestQueue = () => {
   const approveRequest = async (requestId: string) => {
     try {
       const { error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .update({ status: 'approved' })
         .eq('id', requestId);
 
@@ -118,7 +117,7 @@ const AdminRequestQueue = () => {
   const rejectRequest = async (requestId: string) => {
     try {
       const { error } = await supabase
-        .from('service_requests')
+        .from('government_services')
         .update({ status: 'cancelled' })
         .eq('id', requestId);
 
@@ -256,11 +255,11 @@ const AdminRequestQueue = () => {
                   <div key={request.id} className="border rounded-lg p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg">{request.service_type}</h3>
+                        <h3 className="font-semibold text-lg">{request.request_type}</h3>
                         <div className="flex items-center mt-2 space-x-4">
                           <div className="flex items-center">
                             <User className="h-4 w-4 mr-2 text-muted-foreground" />
-                            <span className="text-sm">{request.full_name}</span>
+                            <span className="text-sm">{request.client_name}</span>
                           </div>
                           <div className="flex items-center">
                             <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -273,13 +272,13 @@ const AdminRequestQueue = () => {
                       </Badge>
                     </div>
 
-                    {request.document_details && (
+                    {request.description && (
                       <div className="mb-4">
                         <div className="flex items-center mb-1">
                           <FileText className="h-4 w-4 mr-2 text-muted-foreground" />
-                          <span className="text-sm font-medium">Document Details:</span>
+                          <span className="text-sm font-medium">Description:</span>
                         </div>
-                        <p className="text-sm text-muted-foreground ml-6">{request.document_details}</p>
+                        <p className="text-sm text-muted-foreground ml-6">{request.description}</p>
                       </div>
                     )}
 
